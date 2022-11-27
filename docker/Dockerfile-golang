@@ -1,21 +1,11 @@
-FROM golang:1.19.1-bullseye
+FROM golang:1.19.1-alpine
 
 RUN set -eux && \
     ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-     wget \
-     make \
-     unzip \
-     git  && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN wget https://github.com/protocolbuffers/protobuf/releases/download/v3.20.1/protoc-3.20.1-linux-x86_64.zip && \
-    unzip -d /usr/local protoc-3.20.1-linux-x86_64.zip && \
-    rm protoc-3.20.1-linux-x86_64.zip
-
+RUN apk upgrade --update && \
+    apk add build-base protobuf-dev
+    
 WORKDIR /app/src
 
 ENV GOBIN=/usr/local/bin/
