@@ -1,0 +1,20 @@
+version: '3.9'
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile-golang
+    image: grpc-gateway-app:1.0
+    container_name: grpc-gateway-app
+    networks:
+      - grpc-gateway
+    ports:
+      - "18080:8080"
+    volumes:
+      - ../app:/app
+    env_file:
+      - ../app/src/app.env
+
+networks:
+  grpc-gateway:
+    driver: bridge

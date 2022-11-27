@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package grpc;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+
+option go_package = "github.com/seki-shinnosuke/grpc-gateway/gen/go/grpc";
+
+service TodoApi {
+  // Get Tasks 
+  rpc GetTasks(google.protobuf.Empty) returns (stream TodoResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/tasks"
+    };
+  }
+
+  // Get Task By Task ID 
+  rpc GetTask(GetTaskRequest) returns (TodoDetailResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/tasks/{task_id}"
+    };
+  }
+
+  // Create Task
+  rpc CreateTask(CreateTaskRequest) returns (TodoDetailResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/tasks"
+      body: "*"
+    };
+  }
+
+  // Update Task By Task ID 
+  rpc UpdateTask(UpdateTaskRequest) returns (TodoDetailResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/tasks/{task_id}"
+      body: "*"
+    };
+  }
+
+  // Delete Task By Task ID 
+  rpc DeleteTask(DeleteTaskRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/api/v1/tasks/{task_id}"
+    };
+  }
+}
+
+message Task {
+  int64 task_id = 1;
+  string person_name = 2;
+  string task_name = 3;
+}
+
+message GetTaskRequest {
+  int64 task_id = 1;
+}
+
+message TodoResponse {
+  repeated Task tasks = 1;
+}
+
+message TodoDetailResponse {
+  Task task = 1;
+}
+
+message CreateTaskRequest {
+  Task task = 1;
+}
+
+message UpdateTaskRequest {
+  int64 task_id = 1;
+  Task task = 2;
+}
+
+message DeleteTaskRequest {
+  int64 task_id = 1;
+}

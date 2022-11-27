@@ -1,0 +1,260 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "todo.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "TodoApi"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/tasks": {
+      "get": {
+        "summary": "Get Tasks",
+        "operationId": "TodoApi_GetTasks",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/grpcTodoResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of grpcTodoResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "TodoApi"
+        ]
+      },
+      "post": {
+        "summary": "Create Task",
+        "operationId": "TodoApi_CreateTask",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/grpcTodoDetailResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/grpcCreateTaskRequest"
+            }
+          }
+        ],
+        "tags": [
+          "TodoApi"
+        ]
+      }
+    },
+    "/api/v1/tasks/{taskId}": {
+      "get": {
+        "summary": "Get Task By Task ID",
+        "operationId": "TodoApi_GetTask",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/grpcTodoDetailResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "TodoApi"
+        ]
+      },
+      "delete": {
+        "summary": "Delete Task By Task ID",
+        "operationId": "TodoApi_DeleteTask",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "TodoApi"
+        ]
+      },
+      "put": {
+        "summary": "Update Task By Task ID",
+        "operationId": "TodoApi_UpdateTask",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/grpcTodoDetailResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "task": {
+                  "$ref": "#/definitions/grpcTask"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "TodoApi"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "grpcCreateTaskRequest": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "$ref": "#/definitions/grpcTask"
+        }
+      }
+    },
+    "grpcTask": {
+      "type": "object",
+      "properties": {
+        "taskId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "personName": {
+          "type": "string"
+        },
+        "taskName": {
+          "type": "string"
+        }
+      }
+    },
+    "grpcTodoDetailResponse": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "$ref": "#/definitions/grpcTask"
+        }
+      }
+    },
+    "grpcTodoResponse": {
+      "type": "object",
+      "properties": {
+        "tasks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/grpcTask"
+          }
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}
